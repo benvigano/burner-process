@@ -6,10 +6,11 @@ PyPI: `pip install scriptifier`<br/>
 
 ## Usage
 ```python
-import os
 from scriptifier import scriptifier
 
-from my_package.my_package_module import func_1
+def func_1(in):
+    (...)
+    return out
 
 scriptified_func_1 = scriptifier.run_as_script(func_1)
 out = scriptified_func_1(in)
