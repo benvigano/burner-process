@@ -40,7 +40,7 @@ for identifier in os.listdir(io_directory):
 current_call_directory = os.path.join(io_directory, str(max(list(identifiers))))
 
 # Load the arguments and the function name then delete the file
-args, kwargs, function_name, local_namespace_only = pickle.load(open(os.path.join(current_call_directory, "INPUT.pickle"), 'rb'))
+args, kwargs, function_name = pickle.load(open(os.path.join(current_call_directory, "INPUT.pickle"), 'rb'))
 os.remove(os.path.join(current_call_directory, "INPUT.pickle"))
 
 # Import the namespace of the function's original module, then delete the temporary file
