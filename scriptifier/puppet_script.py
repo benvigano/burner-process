@@ -44,8 +44,8 @@ args, kwargs, function_name, local_namespace_only = pickle.load(open(os.path.joi
 os.remove(os.path.join(current_call_directory, "INPUT.pickle"))
 
 # Import the namespace of the function's original module, then delete the temporary file
-    import temporary_module
-    from temporary_module import *
+import temporary_module
+from temporary_module import *
 
 # Call the function and save the returns
 func = getattr(temporary_module, function_name)
