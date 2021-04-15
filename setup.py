@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
    name='scriptifier',
-   version="0.0.5",
+   version="0.0.6",
    description='A Python package that allows to run a function in a separated script, seamlessly.',
    license="MIT",
    long_description=long_description,
