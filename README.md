@@ -22,12 +22,13 @@ out = scriptified_func_1(in)
   - a list of keras models
 
 ## Features
-- OS independent<br/>
-- Doesn't rely on Multiprocessing package<br/>
-- Doesn't rely on Queue for the returns (which would put a limit on the size)<br/>
-- Supports functions from imported modules<br/>
+- Tested on Windows and Linux
 - Supports overlapping/parallel calls<br/>
+- Supports functions from imported packages and modules<br/>
+- Doesn't rely on `multiprocessing` package<br/>
+- Doesn't rely on a queue for the returns (which would add a limit the size)<br/>
+
 
 ## Possible uses
-- Memory leak managemenet (100% of the memory allocated within the function will be freed)<br/>
-- Per-function resources usage monitoring<br/>
+- Memory leaks managemenet (100% of the memory allocated within the function will be freed once it ends)<br/>
+- Function specific resource usage monitoring<br/>
