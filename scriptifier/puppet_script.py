@@ -43,12 +43,9 @@ current_call_directory = os.path.join(io_directory, str(max(list(identifiers))))
 args, kwargs, function_name, local_namespace_only = pickle.load(open(os.path.join(current_call_directory, "INPUT.pickle"), 'rb'))
 os.remove(os.path.join(current_call_directory, "INPUT.pickle"))
 
-if local_namespace_only is False:
-    # Import the namespace of the function's original module, then delete the temporary file
+# Import the namespace of the function's original module, then delete the temporary file
     import temporary_module
     from temporary_module import *
-else:
-    pass
 
 # Call the function and save the returns
 func = getattr(temporary_module, function_name)
