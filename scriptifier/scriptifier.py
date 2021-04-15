@@ -51,7 +51,7 @@ def higher_identifier_generator(io_directory_path):
     return unused_identifier
 
 
-def arguments_saver(io_directory_path, function_name, *args, **kwargs):
+def arguments_saver(io_directory_path, function_name, local_namespace_only, *args, **kwargs):
     # Create a new io subdirectory without overwriting the other subdirectories of previous calls that haven't ended yet (if any)
     unused_identifier = higher_identifier_generator(io_directory_path)
 
@@ -60,7 +60,7 @@ def arguments_saver(io_directory_path, function_name, *args, **kwargs):
 
     # Store the arguments and the function name in the current call's directory
     try:
-        pickle.dump([args, kwargs, function_name], open(os.path.join(current_call_directory, "INPUT.pickle"), 'wb'))
+        pickle.dump([args, kwargs, function_name, local_namespace_only], open(os.path.join(current_call_directory, "INPUT.pickle"), 'wb'))
 
     except Exception:
         raise Exception("Scriptifier Error: The arguments must be pickleable.")
