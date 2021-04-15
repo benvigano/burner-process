@@ -1,6 +1,7 @@
 from setuptools import setup
 import subprocess
 import os
+from version import get_version
 
 cf_remote_version = subprocess.run(['git', 'describe', '--tags'], stdout=subprocess.PIPE).stdout.decode("utf-8").strip()
 assert "." in cf_remote_version
@@ -14,7 +15,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
    name='scriptifier',
-   version=cf_remote_version,
+   version=get_version(),
    description='A Python package that allows to run a function in a separated script, seamlessly.',
    license="MIT",
    long_description=long_description,
