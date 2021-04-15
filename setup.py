@@ -16,6 +16,6 @@ setup(
    author='ben981',
    author_email='beniamino.vigano@protonmail.com',
    url="https://github.com/ben981/scriptifier",
-   keywords='processify, processifier, script, scriptify, scriptify',
+   keywords='scriptify, processify, processifier, subprocess, multiprocessing, memory, leak',
    packages=['scriptifier'],
 )
