@@ -2,6 +2,7 @@ import os
 import sys
 import pickle
 from functools import wraps
+import shutil
 
 
 io_directory = "io"
@@ -51,12 +52,7 @@ def higher_identifier_generator(io_directory_path):
     return unused_identifier
 
 
-def arguments_saver(io_directory_path, function_name, *args, **kwargs):
-    # Create a new io subdirectory without overwriting the other subdirectories of previous calls that haven't ended yet (if any)
-    unused_identifier = higher_identifier_generator(io_directory_path)
-
-    current_call_directory = os.path.join(io_directory_path, unused_identifier)
-    os.makedirs(current_call_directory)
+def arguments_saver(current_call_directory, function_name, *args, **kwargs):
 
     # Store the arguments and the function name in the current call's directory
     try:
@@ -105,7 +101,7 @@ def returns_loader(current_call_directory, tf_exclude_gpu):
 
 
 def scriptify(function, tf_exclude_gpu=False):
-    
+
     # Check if the io folder already exists
     if os.path.isdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory)):
         pass
@@ -113,10 +109,9 @@ def scriptify(function, tf_exclude_gpu=False):
         # If it wasn't created yet, create it
         os.mkdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory))
 
-
     @wraps(function)
     def wrapper(*args, **kwargs):
-        
+
         # Temporarily copy the module of the function in the package folder
         function_module = sys.modules[function.__module__]
         function_module_path = function_module.__file__
@@ -128,20 +123,33 @@ def scriptify(function, tf_exclude_gpu=False):
 
         # Save the arguments and the file name in a dedicated directory
         io_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory)
-        current_call_directory = arguments_saver(io_directory_path, function_name, *args, **kwargs)
 
-        # Run the puppet scrit and wait until it ends
-        _, path = os.path.splitdrive(os.path.dirname(os.path.abspath(__file__)))
-        puppet_script_path = os.path.join(path, "puppet_script.py")
-        
-        # If the path contains whitespaces, raise an exception
-        if ' ' in puppet_script_path:
-            raise Exception("Scriptifier Error: The path to the package installation directory can not contain whitespaces. (path=" + str(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + ")")
-            
-        os.system(f"python {puppet_script_path} 1")
+        # Create a new io subdirectory without overwriting the other subdirectories of previous calls that haven't ended yet (if any)
+        unused_identifier = higher_identifier_generator(io_directory_path)
+        current_call_directory = os.path.join(io_directory_path, unused_identifier)
+        os.makedirs(current_call_directory)
 
-        # Load the returns
-        returns = returns_loader(current_call_directory, tf_exclude_gpu)
+        try:
+            current_call_directory = arguments_saver(current_call_directory, function_name, *args, **kwargs)
+
+            # Run the puppet scrit and wait until it ends
+            _, path = os.path.splitdrive(os.path.dirname(os.path.abspath(__file__)))
+            puppet_script_path = os.path.join(path, "puppet_script.py")
+
+            # If the path contains whitespaces, raise an exception
+            if ' ' in puppet_script_path:
+                raise Exception("Scriptifier Error: The path to the package installation directory can not contain whitespaces. (path=" + str(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + ")")
+
+            os.system(f"python {puppet_script_path} 1")
+
+            # Load the returns
+            returns = returns_loader(current_call_directory, tf_exclude_gpu)
+
+        except:
+
+            # Delete the folder and any possible content in order to avoid residues to build up
+            shutil.rmtree(current_call_directory)
+            raise
 
         return returns
     return wrapper
