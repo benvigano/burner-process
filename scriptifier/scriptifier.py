@@ -140,7 +140,7 @@ def scriptify(function, tf_exclude_gpu=False):
             if ' ' in puppet_script_path:
                 raise Exception("Scriptifier Error: The path to the package installation directory can not contain whitespaces. (path=" + str(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + ")")
 
-            os.system(f"python {puppet_script_path} 1")
+            os.system(f'python "{puppet_script_path}" 1')
 
             # Load the returns
             returns = returns_loader(current_call_directory, tf_exclude_gpu)
