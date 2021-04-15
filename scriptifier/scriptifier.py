@@ -104,7 +104,7 @@ def returns_loader(current_call_directory, tf_exclude_gpu):
     return returns
 
 
-def scriptify(function, tf_exclude_gpu=False):
+def scriptify(function, tf_exclude_gpu=False, local_namespace_only=False):
     
     # Check if the io folder already exists
     if os.path.isdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory)):
@@ -128,7 +128,7 @@ def scriptify(function, tf_exclude_gpu=False):
 
         # Save the arguments and the file name in a dedicated directory
         io_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory)
-        current_call_directory = arguments_saver(io_directory_path, function_name, *args, **kwargs)
+        current_call_directory = arguments_saver(io_directory_path, function_name, local_namespace_only, *args, **kwargs)
 
         # Run the puppet scrit and wait until it ends
         _, path = os.path.splitdrive(os.path.dirname(os.path.abspath(__file__)))
