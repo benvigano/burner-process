@@ -51,7 +51,7 @@ def higher_identifier_generator(io_directory_path):
     return unused_identifier
 
 
-def arguments_saver(io_directory_path, function_name, local_namespace_only, *args, **kwargs):
+def arguments_saver(io_directory_path, function_name, *args, **kwargs):
     # Create a new io subdirectory without overwriting the other subdirectories of previous calls that haven't ended yet (if any)
     unused_identifier = higher_identifier_generator(io_directory_path)
 
@@ -60,7 +60,7 @@ def arguments_saver(io_directory_path, function_name, local_namespace_only, *arg
 
     # Store the arguments and the function name in the current call's directory
     try:
-        pickle.dump([args, kwargs, function_name, local_namespace_only], open(os.path.join(current_call_directory, "INPUT.pickle"), 'wb'))
+        pickle.dump([args, kwargs, function_name], open(os.path.join(current_call_directory, "INPUT.pickle"), 'wb'))
 
     except Exception:
         raise Exception("Scriptifier Error: The arguments must be pickleable.")
@@ -104,7 +104,7 @@ def returns_loader(current_call_directory, tf_exclude_gpu):
     return returns
 
 
-def scriptify(function, tf_exclude_gpu=False, local_namespace_only=False):
+def scriptify(function, tf_exclude_gpu=False):
     
     # Check if the io folder already exists
     if os.path.isdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory)):
@@ -118,20 +118,17 @@ def scriptify(function, tf_exclude_gpu=False, local_namespace_only=False):
     def wrapper(*args, **kwargs):
         
         # Temporarily copy the module of the function in the package folder
-        if local_namespace_only is False:
-            function_module = sys.modules[function.__module__]
-            function_module_path = function_module.__file__
-            final_module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temporary_module.py")
-            file_copier(function_module_path, final_module_path)
-        else:
-            pass
+        function_module = sys.modules[function.__module__]
+        function_module_path = function_module.__file__
+        final_module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temporary_module.py")
+        file_copier(function_module_path, final_module_path)
 
         # Get the function name
         function_name = function.__name__
 
         # Save the arguments and the file name in a dedicated directory
         io_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory)
-        current_call_directory = arguments_saver(io_directory_path, function_name, local_namespace_only, *args, **kwargs)
+        current_call_directory = arguments_saver(io_directory_path, function_name, *args, **kwargs)
 
         # Run the puppet scrit and wait until it ends
         _, path = os.path.splitdrive(os.path.dirname(os.path.abspath(__file__)))
