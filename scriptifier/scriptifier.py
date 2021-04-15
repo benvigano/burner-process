@@ -116,12 +116,15 @@ def scriptify(function, tf_exclude_gpu=False, local_namespace_only=False):
 
     @wraps(function)
     def wrapper(*args, **kwargs):
-
+        
         # Temporarily copy the module of the function in the package folder
-        function_module = sys.modules[function.__module__]
-        function_module_path = function_module.__file__
-        final_module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temporary_module.py")
-        file_copier(function_module_path, final_module_path)
+        if local_namespace_only is False:
+            function_module = sys.modules[function.__module__]
+            function_module_path = function_module.__file__
+            final_module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temporary_module.py")
+            file_copier(function_module_path, final_module_path)
+        else:
+            pass
 
         # Get the function name
         function_name = function.__name__
