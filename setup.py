@@ -2,12 +2,19 @@ from setuptools import setup
 import subprocess
 import os
 
+cf_remote_version = subprocess.run(['git', 'describe', '--tags'], stdout=subprocess.PIPE).stdout.decode("utf-8").strip()
+assert "." in cf_remote_version
+
+assert os.path.isfile("cf_remote/version.py")
+with open("cf_remote/VERSION", "w", encoding="utf-8") as fh:
+    fh.write(f"{cf_remote_version}\n")
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
    name='scriptifier',
-   version="0.0.6",
+   version=cf_remote_version,
    description='A Python package that allows to run a function in a separated script, seamlessly.',
    license="MIT",
    long_description=long_description,
