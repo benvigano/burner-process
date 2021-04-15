@@ -2,7 +2,7 @@ import pickle
 import os
 
 
-io_directory = "IO"
+io_directory = "io"
 
 
 def returns_saver(returns, current_call_directory):
