@@ -3,7 +3,8 @@
 
 ## Install
 PyPI: `pip install scriptifier`<br/>
-Please notice that the path to the package installation folder should not contain whitespaces. While this would tipically not be the case it's important to point out that it will raise an exception.
+<br/>
+*Please notice that the path to the package installation folder should not contain whitespaces. While this would tipically not be the case it's important to point out that it will raise an exception.*
 
 ## Usage
 ```python
