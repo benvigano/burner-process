@@ -133,6 +133,11 @@ def scriptify(function, tf_exclude_gpu=False):
         # Run the puppet scrit and wait until it ends
         _, path = os.path.splitdrive(os.path.dirname(os.path.abspath(__file__)))
         puppet_script_path = os.path.join(path, "puppet_script.py")
+        
+        # If the path contains whitespaces, raise an exception
+        if ' ' in puppet_script_path:
+            raise Exception("Scriptifier Error: The path to the package installation directory can not contain whitespaces. (path=" + str(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + ")")
+            
         os.system(f"python {puppet_script_path} 1")
 
         # Load the returns
