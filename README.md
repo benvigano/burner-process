@@ -16,11 +16,11 @@ scriptified_func_1 = scriptifier.run_as_script(func_1)
 out = scriptified_func_1(in)
 ```
 
-- Each argument must be pickleable<br/>
+- Each argument must be **pickleable**<br/>
 - Each return value must be either:
   - pickleable
-  - a keras model
-  - a list of keras models
+  - a `tf.keras.Model` object
+  - an iterable whose elements are `tf.keras.Model` objects
 
 ## Features
 - Tested on Windows and Linux
