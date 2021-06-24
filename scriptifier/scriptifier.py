@@ -100,7 +100,7 @@ def returns_loader(current_call_directory, tf_exclude_gpu):
     return returns
 
 
-def scriptify(function, tf_exclude_gpu=False):
+def run_as_script(function, tf_exclude_gpu=False):
 
     # Check if the io folder already exists
     if os.path.isdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory)):
