@@ -4,6 +4,10 @@
 ## Install
 PyPI: `pip install scriptifier`<br/>
 
+## Possible uses
+- Workaround to memory leaks (the memory allocated within the function will be completely freed once it ends)<br/>
+- Function specific resource usage monitoring<br/>
+
 ## Usage
 ```python
 from scriptifier import scriptifier
@@ -28,8 +32,3 @@ out = scriptified_func_1(in)
 - Supports functions from imported packages and modules<br/>
 - Doesn't rely on `multiprocessing` package<br/>
 - Doesn't rely on a queue for the returns (which would add a limit the size)<br/>
-
-
-## Possible uses
-- Workaround to memory leaks (the memory allocated within the function will be completely freed once it ends)<br/>
-- Function specific resource usage monitoring<br/>
