@@ -4,7 +4,7 @@
 ## Install
 PyPI: `pip install scriptifier`<br/>
 
-## Possible uses
+## Potential uses
 - Workaround to memory leaks (the memory allocated within the function will be completely freed once it ends)<br/>
 - Function specific resource usage monitoring<br/>
 
