@@ -1,5 +1,5 @@
 # scriptifier
-`scriptifier` is a Python package that allows to run a function in a separated script, seamlessly. 
+`scriptifier` is a Python wrapper that generates a throw-away script and runs the wrapped function inside of it, seamlessly. 
 
 ## Install
 PyPI: `pip install scriptifier`<br/>
@@ -31,5 +31,5 @@ out = scriptified_func_1(in)
 
 
 ## Possible uses
-- Memory leaks managemenet (100% of the memory allocated within the function will be freed once it ends)<br/>
+- Workaround to memory leaks (the memory allocated within the function will be completely freed once it ends)<br/>
 - Function specific resource usage monitoring<br/>
