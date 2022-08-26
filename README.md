@@ -2,7 +2,7 @@
 `scriptifier` is a Python wrapper that generates a throw-away script and runs the wrapped function inside of it, seamlessly. 
 
 ## Features
-- Arguments and returns
+- Arguments and returns:
     - Each argument must be **pickleable**<br/>
     - Each return value must be either:
         - pickleable
