@@ -29,6 +29,6 @@ scriptified_func_1 = scriptifier.run_as_script(func_1)
 out = scriptified_func_1(in)
 ```
 
-## Potential uses
+## Use cases
 - Workaround to memory leaks (the memory allocated within the function will be completely freed once it ends)<br/>
 - Function specific resource usage monitoring<br/>
