@@ -8,7 +8,7 @@ import shutil
 io_directory = "io"
 
 
-def file_copier(source, destination):
+def _copy_file(source, destination):
     try:
         o_binary = os.O_BINARY
     except Exception:
@@ -38,7 +38,7 @@ def file_copier(source, destination):
             pass
 
 
-def higher_identifier_generator(io_directory_path):
+def _generate_higher_identifier(io_directory_path):
     used_identifiers = []
     if os.listdir(os.path.join(os.getcwd(), io_directory_path)):
         for folder_name in os.listdir(os.path.join(os.getcwd(), io_directory_path)):
@@ -52,7 +52,7 @@ def higher_identifier_generator(io_directory_path):
     return unused_identifier
 
 
-def arguments_saver(current_call_directory, function_name, *args, **kwargs):
+def _save_arguments(current_call_directory, function_name, *args, **kwargs):
 
     # Store the arguments and the function name in the current call's directory
     try:
@@ -64,8 +64,8 @@ def arguments_saver(current_call_directory, function_name, *args, **kwargs):
     return current_call_directory
 
 
-def returns_loader(current_call_directory, tf_exclude_gpu):
-    # Load the returns file based on the extension
+def _load_output(current_call_directory, tf_exclude_gpu):
+    # Load the output file based on the extension
     if len(os.listdir(current_call_directory)) > 1:
 
         if tf_exclude_gpu:
@@ -74,10 +74,10 @@ def returns_loader(current_call_directory, tf_exclude_gpu):
             pass
 
         from tensorflow import keras
-        returns = []
+        output = []
         for model_file_name in os.listdir(current_call_directory):
             model = keras.models.load_model(os.path.join(current_call_directory, model_file_name), compile=False)
-            returns.append(model)
+            output.append(model)
             os.remove(os.path.join(current_call_directory, model_file_name))
 
     else:
@@ -86,18 +86,18 @@ def returns_loader(current_call_directory, tf_exclude_gpu):
         extension = os.path.splitext(filename[0])[1]
 
         if extension == ".pickle":
-            returns = pickle.load(open(os.path.join(current_call_directory, "RETURNS.pickle"), 'rb'))
-            os.remove(os.path.join(current_call_directory, "RETURNS.pickle"))
+            output = pickle.load(open(os.path.join(current_call_directory, "OUTPUTS.pickle"), 'rb'))
+            os.remove(os.path.join(current_call_directory, "OUTPUTS.pickle"))
 
         elif extension == ".h5":
             from tensorflow import keras
-            returns = keras.models.load_model(os.path.join(current_call_directory, "MODEL.h5"), compile=False)
+            output = keras.models.load_model(os.path.join(current_call_directory, "MODEL.h5"), compile=False)
             os.remove(os.path.join(current_call_directory, "MODEL.h5"))
 
     # Delete the directory
     os.rmdir(current_call_directory)
 
-    return returns
+    return outputs
 
 
 def run_as_script(function, tf_exclude_gpu=False):
@@ -116,7 +116,7 @@ def run_as_script(function, tf_exclude_gpu=False):
         function_module = sys.modules[function.__module__]
         function_module_path = function_module.__file__
         final_module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temporary_module.py")
-        file_copier(function_module_path, final_module_path)
+        copy_file(function_module_path, final_module_path)
 
         # Get the function name
         function_name = function.__name__
@@ -125,14 +125,14 @@ def run_as_script(function, tf_exclude_gpu=False):
         io_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), io_directory)
 
         # Create a new io subdirectory without overwriting the other subdirectories of previous calls that haven't ended yet (if any)
-        unused_identifier = higher_identifier_generator(io_directory_path)
+        unused_identifier = _generate_higher_identifier(io_directory_path)
         current_call_directory = os.path.join(io_directory_path, unused_identifier)
         os.makedirs(current_call_directory)
 
         try:
-            current_call_directory = arguments_saver(current_call_directory, function_name, *args, **kwargs)
+            current_call_directory = _save_arguments(current_call_directory, function_name, *args, **kwargs)
 
-            # Run the puppet scrit and wait until it ends
+            # Run the puppet script and wait until it ends
             _, path = os.path.splitdrive(os.path.dirname(os.path.abspath(__file__)))
             puppet_script_path = os.path.join(path, "puppet_script.py")
 
@@ -142,8 +142,8 @@ def run_as_script(function, tf_exclude_gpu=False):
 
             os.system(f'python "{puppet_script_path}" 1')
 
-            # Load the returns
-            returns = returns_loader(current_call_directory, tf_exclude_gpu)
+            # Load the output
+            output = _load_output(current_call_directory, tf_exclude_gpu)
 
         except:
 
@@ -151,5 +151,5 @@ def run_as_script(function, tf_exclude_gpu=False):
             shutil.rmtree(current_call_directory)
             raise
 
-        return returns
+        return output
     return wrapper
