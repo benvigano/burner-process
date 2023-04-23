@@ -36,7 +36,7 @@ my_processified_function(5)
 >> 10
 ```
 
-#### Verbose
+### Verbose example
 `my_module.py`
 ```python
 def my_function(x):
