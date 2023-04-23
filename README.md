@@ -29,8 +29,8 @@ def my_function(x):
 from burner_process import processify
 from my_module import my_function
 
-my_processified_function = processify(my_function)
-my_processified_function(5)
+my_function_p = processify(my_function)
+my_function_p(5)
 ```
 ```
 >> 10
@@ -48,8 +48,8 @@ def my_function(x):
 from burner_process import processify
 from my_module import my_function
 
-my_processified_function = processify(my_function, verbose=True)
-my_processified_function(5)
+my_function_p = processify(my_function, verbose=True)
+my_function_p(5)
 ```
 ```
 >> Launching from main process (pid: 20124, parent pid: 10568)
