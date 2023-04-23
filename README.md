@@ -15,7 +15,7 @@ Other solutions (such as [this one](https://gist.github.com/schlamar/2311116)) r
 
 ## Usage
 ### Installation
-`pip install burner_process`<br/>
+`pip install burner-process`<br/>
 
 ### Example
 `my_module.py`
