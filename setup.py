@@ -7,15 +7,15 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-   name='scriptifier',
+   name='burner_process',
    version=get_version(),
-   description='A Python package that allows to run a function in a separated script, seamlessly.',
+   description="A wrapper that runs a function inside a new process, that is not a child of the main process.",
    license="MIT",
    long_description=long_description,
    long_description_content_type='text/markdown',
-   author='ben981',
+   author='benvigano',
    author_email='beniamino.vigano@protonmail.com',
-   url="https://github.com/ben981/scriptifier",
-   keywords='scriptify, processify, processifier, subprocess, multiprocessing, memory, leak',
-   packages=['scriptifier'],
+   url="https://github.com/benvigano/burner_process",
+   keywords='subprocessing, subprocess, process, multiprocessing, processify, processifier, memory leak',
+   packages=['burner_process'],
 )

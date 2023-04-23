@@ -1,5 +1,3 @@
-# Source: https://github.com/Changaco/version.py
-
 from os.path import dirname, isdir, join
 import re
 from subprocess import CalledProcessError, check_output
