@@ -9,6 +9,8 @@ io_directory = "io"
 
 
 def _generate_higher_identifier(io_directory_path):
+    '''Generate an identifier that hasn't been used yet'''
+    
     used_identifiers = []
     if os.listdir(os.path.join(os.getcwd(), io_directory_path)):
         for folder_name in os.listdir(os.path.join(os.getcwd(), io_directory_path)):
@@ -23,8 +25,8 @@ def _generate_higher_identifier(io_directory_path):
 
 
 def _save_arguments(current_call_directory, function_name, function_module_path, function_module_name, verbose, *args, **kwargs):
-
-    # Store the arguments and the function name in the current call directory
+    '''Save the arguments and the function name in the current call directory'''
+    
     try:
         pickle.dump([args, kwargs, function_name, function_module_path, function_module_name, verbose], open(os.path.join(current_call_directory, "INPUT.pickle"), 'wb'))
 
@@ -35,22 +37,20 @@ def _save_arguments(current_call_directory, function_name, function_module_path,
 
 
 def _load_outputs(current_call_directory):
-
-    # Load the outputs
+    '''Load the outputs ftom the current_call_directory'''
+    
     filename = os.listdir(current_call_directory)
     extension = os.path.splitext(filename[0])[1]
 
     outputs = pickle.load(open(os.path.join(current_call_directory, "OUTPUTS.pickle"), 'rb'))
     os.remove(os.path.join(current_call_directory, "OUTPUTS.pickle"))
-
-    # Delete the directory
-    os.rmdir(current_call_directory)
-
+    
     return outputs
 
 
 def processify(function, verbose=False):
-
+    '''Transform a function so that it runs in a new process'''
+    
     if verbose:
         print(f"Launching from main process (pid: {os.getpid()}, parent pid: {os.getppid()})")
 
@@ -95,11 +95,12 @@ def processify(function, verbose=False):
             # Load the outputs
             outputs = _load_outputs(current_call_directory)
 
-        except Exception:
+        except Exception:            
+            raise
 
+        finally:
             # In case of error, delete the current call directory
             shutil.rmtree(current_call_directory)
-            raise
 
         return outputs
     return wrapper
